@@ -1,0 +1,37 @@
+{
+  "mcpServers": {
+    "serena": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "-v",
+        "${workspaceFolder}:/workspace",
+        "-w",
+        "/workspace",
+        "tsumiki_sample-serena-mcp:latest"
+      ],
+      "env": {
+        "SERENA_API_KEY": "${env:SERENA_API_KEY}",
+        "SERENA_MODEL": "gpt-4o-mini"
+      }
+    },
+    "language-server": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "-v",
+        "${workspaceFolder}:/workspace",
+        "-w",
+        "/workspace",
+        "tsumiki_sample-language-server:latest"
+      ],
+      "env": {
+        "LSP_PORT": "8081"
+      }
+    }
+  }
+}

@@ -8,13 +8,12 @@
 
 ### 1.1 プロジェクト初期化（並列実行）
 ```bash
-# プロジェクトディレクトリ作成
-mkdir todo-app
-cd todo-app
+# カレントプロジェクトを使用
+# このプロジェクト（tsumiki_sample）が対象アプリです
 
-# Git初期化
+# Git初期化（既存の場合は不要）
 git init
-git remote add origin https://github.com/your-username/todo-app.git
+git remote add origin https://github.com/your-username/tsumiki_sample.git
 ```
 
 ### 1.2 Tsumikiインストール（並列実行）

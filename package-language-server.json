@@ -1,0 +1,32 @@
+{
+  "name": "language-server",
+  "version": "1.0.0",
+  "description": "Language Server for TODO App Development",
+  "main": "language-server.js",
+  "scripts": {
+    "start": "node language-server.js",
+    "dev": "nodemon language-server.js"
+  },
+  "dependencies": {
+    "vscode-languageserver": "^8.0.0",
+    "vscode-languageserver-textdocument": "^1.0.8",
+    "vscode-uri": "^3.0.2",
+    "typescript": "^5.0.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "glob": "^10.0.0",
+    "fs-extra": "^11.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  },
+  "keywords": [
+    "language-server",
+    "typescript",
+    "javascript",
+    "kotlin",
+    "lsp"
+  ],
+  "author": "Serena Team",
+  "license": "MIT"
+}

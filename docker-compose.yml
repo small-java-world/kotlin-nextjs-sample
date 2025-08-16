@@ -29,6 +29,33 @@ services:
     depends_on:
       - backend
 
+  serena-mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile.serena-mcp
+    ports:
+      - "8082:8080"
+    environment:
+      - SERENA_API_KEY=${SERENA_API_KEY:-}
+      - SERENA_MODEL=${SERENA_MODEL:-gpt-4o-mini}
+    volumes:
+      - .:/workspace
+    profiles:
+      - mcp
+
+  language-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.language-server
+    ports:
+      - "8081:8081"
+    environment:
+      - LSP_PORT=8081
+    volumes:
+      - .:/workspace
+    profiles:
+      - mcp
+
   postgres:
     image: postgres:15-alpine
     environment:

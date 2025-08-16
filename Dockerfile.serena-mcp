@@ -1,0 +1,28 @@
+FROM python:3.11-slim
+
+# 作業ディレクトリを設定
+WORKDIR /app
+
+# 必要なパッケージをインストール
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Python依存関係をインストール
+COPY requirements-serena.txt .
+RUN pip install --no-cache-dir -r requirements-serena.txt
+
+# Serena MCPサーバーのコードをコピー
+COPY serena-mcp-server.py .
+
+# 環境変数を設定
+ENV PYTHONPATH=/app
+ENV SERENA_API_KEY=""
+ENV SERENA_MODEL="gpt-4o-mini"
+
+# ポートを公開
+EXPOSE 8080
+
+# サーバーを起動
+CMD ["python", "serena-mcp-server.py"]

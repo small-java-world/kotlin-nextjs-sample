@@ -1,0 +1,28 @@
+FROM node:18-alpine
+
+# 作業ディレクトリを設定
+WORKDIR /app
+
+# 必要なパッケージをインストール
+RUN apk add --no-cache \
+    git \
+    python3 \
+    make \
+    g++
+
+# package.jsonをコピーして依存関係をインストール
+COPY package-language-server.json package.json
+RUN npm install
+
+# 言語サーバーのコードをコピー
+COPY language-server.js .
+
+# 環境変数を設定
+ENV NODE_ENV=production
+ENV LSP_PORT=8081
+
+# ポートを公開
+EXPOSE 8081
+
+# サーバーを起動
+CMD ["node", "language-server.js", "--stdio"]

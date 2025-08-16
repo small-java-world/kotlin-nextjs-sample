@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "mcp__*",
+      "WebSearch",
+      "Bash(docker run:*)",
+      "mcp__ide__getDiagnostics"
+    ],
+    "deny": [],
+    "ask": []
+  },
+  "enabledMcpjsonServers": [
+    "serena"
+  ],
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "docker run --rm -i -v \"${PWD}:/workspace\" -w /workspace -e SERENA_API_KEY=\"${SERENA_API_KEY}\" -e SERENA_MODEL=\"gpt-4o-mini\" tsumiki_sample-serena-mcp:latest analyze_code \"$CLAUDE_LAST_READ_FILE\" quality"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": ".*\\.kt.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"[Serena MCP] Auto-analyzing Kotlin code...\""
+          }
+        ]
+      }
+    ]
+  }
+}
