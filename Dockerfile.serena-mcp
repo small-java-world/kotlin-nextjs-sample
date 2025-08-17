@@ -18,9 +18,9 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
-# Java 17をインストール
+# Java 21 LTSをインストール（headless版で軽量化）
 RUN apt-get update && apt-get install -y \
-    default-jdk \
+    openjdk-21-jdk-headless \
     && rm -rf /var/lib/apt/lists/*
 
 # Python依存関係をインストール
@@ -42,7 +42,7 @@ COPY serena-mcp-server.py .
 ENV PYTHONPATH=/app
 ENV SERENA_API_KEY=""
 ENV SERENA_MODEL="gpt-4o-mini"
-ENV JAVA_HOME=/usr/lib/jvm/default-java
+ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
 ENV PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
 
 # STDIO運用はエントリポイント不要（Claudeが docker run -i で起動する）

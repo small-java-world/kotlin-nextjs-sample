@@ -47,7 +47,7 @@ RUN apt-get update && apt-get install -y curl ca-certificates && \
     npm i -g typescript typescript-language-server
 
 # JDK + Kotlin LSP
-RUN apt-get install -y openjdk-17-jdk && \
+RUN apt-get install -y openjdk-21-jdk && \
     curl -L -o /usr/local/bin/kotlin-language-server \
       https://github.com/fwcd/kotlin-language-server/releases/latest/download/server && \
     chmod +x /usr/local/bin/kotlin-language-server
