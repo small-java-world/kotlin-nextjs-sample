@@ -39,13 +39,10 @@ services:
       - SERENA_API_KEY=${SERENA_API_KEY:-}
       - SERENA_MODEL=${SERENA_MODEL:-gpt-4o-mini}
       - NODE_PATH=/usr/local/lib/node_modules
-      - JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
-      - KOTLIN_HOME=/root/.sdkman/candidates/kotlin/current
-      - GRADLE_HOME=/opt/gradle-8.5
+      - JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
     volumes:
       - .:/workspace
       - node_modules:/usr/local/lib/node_modules
-      - gradle_cache:/root/.gradle
     profiles:
       - mcp
 
@@ -76,4 +73,3 @@ services:
 volumes:
   postgres_data:
   node_modules:
-  gradle_cache:
