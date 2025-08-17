@@ -29,6 +29,8 @@ services:
     depends_on:
       - backend
 
+  # Serena MCP Server (STDIO運用 - docker compose up -dでは起動しない)
+  # Claude Codeが mcp-servers.json から docker run -i で自動起動
   serena-mcp:
     build:
       context: .
@@ -46,6 +48,7 @@ services:
     profiles:
       - mcp
 
+  # Language Server (独立運用用)
   language-server:
     build:
       context: .

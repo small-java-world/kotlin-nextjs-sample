@@ -1,99 +1,80 @@
-# Tsumiki Sample App
+# Tsumiki Sample Project
 
-KotlinバックエンドとNext.jsフロントエンドのサンプルアプリケーションです。
+Kotlin + Spring Boot + Next.js + AI支援開発環境
 
-## 技術スタック
+## 🚀 クイックスタート
 
-### バックエンド
-- **Kotlin** - プログラミング言語
-- **Spring Boot** - Webフレームワーク
-- **PostgreSQL** - データベース
-- **Kotest** - テストフレームワーク
-
-### フロントエンド
-- **Next.js** - Reactフレームワーク
-- **TypeScript** - プログラミング言語
-- **Tailwind CSS** - CSSフレームワーク
-- **Vitest** - テストフレームワーク
-
-### インフラ
-- **Docker Compose** - コンテナオーケストレーション
-- **DevContainer** - 開発環境
-
-## 起動方法
-
-### Docker Composeを使用
-
+### 1. 環境準備
 ```bash
-# 全サービスを起動
-docker-compose up -d
+# リポジトリをクローン
+git clone <repository-url>
+cd tsumiki_sample
 
-# ログを確認
-docker-compose logs -f
-
-# サービスを停止
-docker-compose down
+# 環境変数を設定
+cp env.example .env
+# .envファイルを編集してAPIキーを設定
 ```
 
-### DevContainerを使用
+**⚠️ 注意**: `env.example` はテンプレートファイルです。秘密情報（APIキー等）は `.env` ファイルに設定し、Gitにコミットしないでください。
 
-1. VS CodeでDevContainer拡張機能をインストール
-2. プロジェクトを開く
-3. `Ctrl+Shift+P` → `Dev Containers: Reopen in Container`
-
-## アクセス
-
-- **フロントエンド**: http://localhost:3000
-- **バックエンドAPI**: http://localhost:8080
-- **PostgreSQL**: localhost:5432
-
-## API エンドポイント
-
-### ホームコンテンツ取得
-```
-GET /api/home/content
-```
-
-レスポンス例:
-```json
-{
-  "title": "Tsumiki Sample App",
-  "subtitle": "Kotlin + Next.js アプリケーション",
-  "description": "Docker ComposeとDevContainerで起動できる、KotlinバックエンドとNext.jsフロントエンドのサンプルアプリケーションです。",
-  "features": [
-    {
-      "id": "kotlin-backend",
-      "title": "Kotlin Backend",
-      "description": "Spring Boot + Kotlinで構築された高性能なバックエンドAPI",
-      "icon": "⚡"
-    }
-  ],
-  "generatedAt": "2024-01-01T00:00:00"
-}
-```
-
-## 開発
-
-### バックエンド開発
-
+### 2. アプリケーション起動
 ```bash
-cd backend
+# バックエンド・フロントエンド・データベースを起動
+docker compose up -d
 
-# アプリケーション起動
-./gradlew bootRun
+# アプリケーションにアクセス
+# Frontend: http://localhost:3000
+# Backend: http://localhost:8080
+```
 
+### 3. AI支援開発環境（STDIO運用）
+```bash
+# Claude Codeでmcp-servers.jsonを使用して起動
+claude --mcp-config mcp-servers.json
+
+# プロジェクトをSerenaでアクティベート
+# 「このリポジトリをSerenaでアクティベートして、シンボルをインデックス化してから作業して」
+```
+
+**注意**: STDIO運用では `docker compose up -d` でSerenaを起動しません（Claude Codeが自動起動）
+
+## 🧩 技術スタック
+
+- **Frontend**: TypeScript + Next.js
+- **Backend**: Kotlin + Spring Boot
+- **Database**: PostgreSQL
+- **AI支援**: Serena MCP + Language Server
+- **開発環境**: Docker / Docker Compose
+
+## 📁 プロジェクト構成
+
+```
+tsumiki_sample/
+├── backend/                 # Kotlin + Spring Boot
+├── frontend/                # TypeScript + Next.js
+├── docker-compose.yml       # 開発環境
+├── mcp-servers.json         # AI支援設定（STDIO運用）
+├── .claude/                 # Claude Code設定
+├── README_AI_GUIDE.md       # AI支援ガイド
+└── README_SERENA_MCP.md     # Serena MCP設定
+```
+
+## 🔧 開発コマンド
+
+### Backend (Kotlin/Spring Boot)
+```bash
 # テスト実行
 ./gradlew test
 
 # ビルド
 ./gradlew build
+
+# マイグレーション
+./gradlew flywayMigrate
 ```
 
-### フロントエンド開発
-
+### Frontend (TypeScript/Next.js)
 ```bash
-cd frontend
-
 # 依存関係インストール
 npm install
 
@@ -107,46 +88,26 @@ npm test
 npm run build
 ```
 
-## テスト
+## 🧪 テスト
 
-### バックエンドテスト (Kotest)
 ```bash
-cd backend
-./gradlew test
+# バックエンドテスト
+docker compose exec backend ./gradlew test
+
+# フロントエンドテスト
+docker compose exec frontend npm test
 ```
 
-### フロントエンドテスト (Vitest)
-```bash
-cd frontend
-npm test
-```
+## 📚 ドキュメント
 
-## プロジェクト構造
+- [AI支援開発ガイド](README_AI_GUIDE.md)
+- [Serena MCP設定](README_SERENA_MCP.md)
+- [プロジェクト設定](PROJECT_CONFIG.md)
 
-```
-tsumiki_sample/
-├── backend/                 # Kotlinバックエンド
-│   ├── src/
-│   │   ├── main/kotlin/
-│   │   │   └── com/tsumiki/
-│   │   │       ├── controller/
-│   │   │       ├── service/
-│   │   │       └── dto/
-│   │   └── test/kotlin/
-│   ├── build.gradle.kts
-│   └── Dockerfile
-├── frontend/                # Next.jsフロントエンド
-│   ├── src/
-│   │   ├── app/
-│   │   ├── components/
-│   │   └── types/
-│   ├── package.json
-│   └── Dockerfile
-├── docker-compose.yml       # Docker Compose設定
-├── .devcontainer/           # DevContainer設定
-└── README.md
-```
+## 🤝 貢献
 
-## ライセンス
+プルリクエストやイシューの報告を歓迎します。
+
+## 📄 ライセンス
 
 MIT License

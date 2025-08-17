@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# Node.jsとnpmをインストール
+# Node.js 20 LTSとnpmをインストール（バージョン固定）
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
@@ -27,10 +27,10 @@ RUN apt-get update && apt-get install -y \
 COPY requirements-serena.txt .
 RUN pip install --no-cache-dir -r requirements-serena.txt
 
-# TypeScript Language Serverをインストール
-RUN npm install -g typescript typescript-language-server
+# TypeScript Language Serverをインストール（バージョン固定）
+RUN npm install -g typescript@~5.4.0 typescript-language-server@~3.0.0
 
-# Kotlin Language Serverをインストール
+# Kotlin Language Serverをインストール（バージョン固定）
 RUN curl -L -o /usr/local/bin/kotlin-language-server \
     https://github.com/fwcd/kotlin-language-server/releases/latest/download/server \
     && chmod +x /usr/local/bin/kotlin-language-server
@@ -44,6 +44,10 @@ ENV SERENA_API_KEY=""
 ENV SERENA_MODEL="gpt-4o-mini"
 ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
 ENV PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
+
+# LSP同居確認用のヘルスチェック
+RUN node -v && npm -v && which typescript-language-server && \
+    java -version && which kotlin-language-server
 
 # STDIO運用はエントリポイント不要（Claudeが docker run -i で起動する）
 CMD ["python", "serena-mcp-server.py"]
