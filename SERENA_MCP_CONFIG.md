@@ -1,4 +1,4 @@
-# Serena MCP 設定
+# Serena MCP 設定（Kotlin/Spring Boot特化）
 
 ## ✅ 前提（毎セッション最初に自動&手動で満たすこと）
 
@@ -14,24 +14,30 @@
 
 このプロジェクトでは、**Serena MCP のシンボル指向ツールを最優先**で使用し、**素朴な全文編集**は避けます。
 
+**Kotlin/Spring Boot特化の利点：**
+- Kotlin LSPとTypeScript LSPが同一コンテナに同居
+- PATH/依存関係の事故を防止
+- Serenaのシンボリック編集が安定化
+
 ---
 
-## 🔧 推奨ツール（例示名：環境のSerenaで近い名称に読み替えOK）
+## 🔧 推奨ツール（Kotlin/Spring Boot特化）
 
 ### コード検索・ナビゲーション
 
-* `mcp__serena__find_symbol`（または `find_definition` 相当）
-* `mcp__serena__find_references`
-* `mcp__serena__analyze_code`（解析系の総称）
+* `mcp__serena__find_symbol`（Kotlin/TypeScriptのシンボル検索）
+* `mcp__serena__find_references`（Kotlin/TypeScriptの参照検索）
+* `mcp__serena__analyze_code`（Kotlin/TypeScriptの解析）
 
 ### コード編集（シンボル安全）
 
-* `mcp__serena__replace_in_symbol`
-* `mcp__serena__insert_after_symbol`（または `insert_before_symbol` 相当）
+* `mcp__serena__replace_in_symbol`（Kotlin/TypeScriptのシンボル置換）
+* `mcp__serena__insert_after_symbol`（シンボル後の挿入）
+* `mcp__serena__insert_before_symbol`（シンボル前の挿入）
 
 ### 補助（必要に応じて）
 
-* `mcp__serena__execute_shell_command`（テスト実行などのランナー）
+* `mcp__serena__execute_shell_command`（Gradle/npmコマンド実行）
 
 > **注意**：Serenaツール名はビルドにより差がある場合があります。上記は**代表例**であり、名称が近いものを優先して用いてください。
 
@@ -44,11 +50,13 @@
 
 ---
 
-## 🔄 TDDワークフロー
+## 🔄 TDDワークフロー（Kotlin/Spring Boot特化）
 
 1. **Serenaで分析**：該当箇所のシンボルを特定（`find_symbol` / `find_references`）
 2. **Serenaで編集**：シンボル単位で追加・置換（`replace_in_symbol` / `insert_after_symbol`）
 3. **品質ゲート**：プロジェクト固有のテスト・品質チェックを実行
+   - **Backend**: `./gradlew test` / `./gradlew build`
+   - **Frontend**: `npm test` / `npx tsc --noEmit`
 4. **リファクタ**：再びSerenaのナビゲーション→編集。必要に応じてテスト更新
 5. **コミット**：最小差分でこまめに（Conventional Commits推奨）
 
@@ -66,7 +74,19 @@
 ## 🔐 権限と安全運用の目安
 
 * Bashでのテスト実行は許可（プロジェクト固有のコマンド）
+  - **Backend**: `./gradlew test`, `./gradlew build`
+  - **Frontend**: `npm test`, `npx tsc --noEmit`
 * 破壊的操作（大量置換・削除）は**事前に差分プランを説明**し、Serenaのシンボル編集で代替できないか再検討
+
+---
+
+## 🐳 Docker環境での最適化
+
+**Serena MCPコンテナの利点：**
+- Kotlin LSPとTypeScript LSPが同一コンテナに同居
+- PATH競合や依存関係の問題を回避
+- Serenaのシンボリック編集が安定化
+- フロントエンド/バックエンド両方のLSPが利用可能
 
 ---
 

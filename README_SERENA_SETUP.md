@@ -23,9 +23,10 @@
 - どのプロジェクトでも使える汎用的なポリシー
 
 ### SERENA_MCP_CONFIG.md（Serena MCP専用）
-- Serena MCPの使用方法とポリシー
+- Serena MCPの使用方法とポリシー（Kotlin/Spring Boot特化）
 - シンボル指向ツールの推奨事項
 - TDDワークフローとフォールバック手順
+- Kotlin LSPとTypeScript LSPの同居による安定化
 
 ### PROJECT_CONFIG.md（プロジェクト固有）
 - 現在のプロジェクト（Kotlin + Spring Boot）の設定

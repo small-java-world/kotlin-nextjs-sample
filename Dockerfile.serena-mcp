@@ -3,20 +3,29 @@ FROM python:3.11-slim
 # 作業ディレクトリを設定
 WORKDIR /app
 
-# Node.jsとnpmをインストール
+# 必要なパッケージをインストール
 RUN apt-get update && apt-get install -y \
     git \
     curl \
     gnupg \
-    && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    wget \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Node.jsとnpmをインストール
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
-# JavaとKotlinをインストール
+# Java 17とKotlinをインストール
 RUN apt-get update && apt-get install -y \
     openjdk-17-jdk \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
+
+# Kotlin Compilerをインストール
+RUN curl -s "https://get.sdkman.io" | bash \
+    && bash -c "source /root/.sdkman/bin/sdkman-init.sh && sdk install kotlin"
 
 # Python依存関係をインストール
 COPY requirements-serena.txt .
@@ -26,7 +35,15 @@ RUN pip install --no-cache-dir -r requirements-serena.txt
 RUN npm install -g typescript typescript-language-server
 
 # Java/Kotlin Language Serverをインストール
-RUN npm install -g java-language-server
+RUN npm install -g \
+    java-language-server \
+    @kotlin/language-server
+
+# Gradle Wrapperをインストール（オプション）
+RUN curl -s "https://services.gradle.org/distributions/gradle-8.5-bin.zip" -o gradle.zip \
+    && unzip gradle.zip -d /opt \
+    && rm gradle.zip \
+    && ln -s /opt/gradle-8.5/bin/gradle /usr/local/bin/gradle
 
 # Serena MCPサーバーのコードをコピー
 COPY serena-mcp-server.py .
@@ -35,7 +52,9 @@ COPY serena-mcp-server.py .
 ENV PYTHONPATH=/app
 ENV SERENA_API_KEY=""
 ENV SERENA_MODEL="gpt-4o-mini"
-ENV PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+ENV KOTLIN_HOME=/root/.sdkman/candidates/kotlin/current
+ENV PATH="/usr/local/bin:/usr/bin:/bin:/root/.sdkman/candidates/kotlin/current/bin:$PATH"
 
 # ポートを公開
 EXPOSE 8080
