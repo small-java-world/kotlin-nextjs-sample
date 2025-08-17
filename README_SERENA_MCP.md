@@ -2,6 +2,10 @@
 
 ## 🚀 運用モード
 
+### 運用モードの選び方
+- **STDIO（推奨）**: `mcp-servers*.json` に `docker run -i ... --transport stdio` を記述。**composeで常駐させない**。
+- **SSE（常駐したい場合）**: `--transport sse --port 9121` でサーバ起動、Claude は **SSE URL** で接続。
+
 ### **STDIO運用（推奨）**
 - **設定**: `mcp-servers.json` に `docker run -i ... --transport stdio` を記述
 - **起動**: Claude Codeが自動的に `docker run -i` で起動
