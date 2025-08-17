@@ -2,36 +2,109 @@
   "permissions": {
     "allow": [
       "Bash(mkdir:*)",
+      "Bash(docker run:*)",
+      "Bash(docker compose exec *)",
+      "Bash(npm test.*|pnpm test.*|yarn test.*)",
+      "Bash(npx tsc.*|npx eslint.*)",
+      "Bash(./gradlew test.*|./gradlew build.*|./gradlew flywayMigrate.*)",
+      "Bash(./gradlew test.*)",
       "mcp__*",
       "WebSearch",
-      "Bash(docker run:*)",
-      "mcp__ide__getDiagnostics"
+      "mcp__ide__getDiagnostics",
+      "Bash(Start-Process \"https://docs.anthropic.com/en/docs/claude-code\")"
     ],
     "deny": [],
     "ask": []
   },
   "enabledMcpjsonServers": [
-    "serena"
+    "serena",
+    "language-server"
   ],
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/debug_tool_usage.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit|Grep",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/serena_guard.sh",
+            "timeout": 60
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/serena_prime.sh"
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Read",
         "hooks": [
           {
             "type": "command",
-            "command": "docker run --rm -i -v \"${PWD}:/workspace\" -w /workspace -e SERENA_API_KEY=\"${SERENA_API_KEY}\" -e SERENA_MODEL=\"gpt-4o-mini\" tsumiki_sample-serena-mcp:latest analyze_code \"$CLAUDE_LAST_READ_FILE\" quality"
+            "command": "echo \"[Serena MCP] File read: $CLAUDE_LAST_READ_FILE\""
+          }
+        ]
+      },
+      {
+        "matcher": "Read.*\\.kt$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"[Serena MCP] Kotlin file read: $CLAUDE_LAST_READ_FILE\""
+          }
+        ]
+      },
+      {
+        "matcher": "Read.*\\.ts$|Read.*\\.tsx$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"[Serena MCP] TypeScript file read: $CLAUDE_LAST_READ_FILE\""
+          }
+        ]
+      },
+      {
+        "matcher": "Read.*\\.js$|Read.*\\.jsx$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"[Serena MCP] JavaScript file read: $CLAUDE_LAST_READ_FILE\""
+          }
+        ]
+      },
+      {
+        "matcher": "Read.*\\.py$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"[Serena MCP] Python file read: $CLAUDE_LAST_READ_FILE\""
           }
         ]
       }
     ],
     "UserPromptSubmit": [
       {
-        "matcher": ".*\\.kt.*",
         "hooks": [
           {
             "type": "command",
-            "command": "echo \"[Serena MCP] Auto-analyzing Kotlin code...\""
+            "command": "echo \"[Serena MCP] Prefer symbol-aware tools (find_symbol/replace_in_symbol). Avoid naive grep/global replace.\""
           }
         ]
       }

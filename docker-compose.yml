@@ -38,8 +38,11 @@ services:
     environment:
       - SERENA_API_KEY=${SERENA_API_KEY:-}
       - SERENA_MODEL=${SERENA_MODEL:-gpt-4o-mini}
+      - NODE_PATH=/usr/local/lib/node_modules
+      - JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
     volumes:
       - .:/workspace
+      - node_modules:/usr/local/lib/node_modules
     profiles:
       - mcp
 
@@ -69,3 +72,4 @@ services:
 
 volumes:
   postgres_data:
+  node_modules:

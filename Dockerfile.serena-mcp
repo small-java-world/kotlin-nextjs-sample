@@ -3,15 +3,30 @@ FROM python:3.11-slim
 # 作業ディレクトリを設定
 WORKDIR /app
 
-# 必要なパッケージをインストール
+# Node.jsとnpmをインストール
 RUN apt-get update && apt-get install -y \
     git \
     curl \
+    gnupg \
+    && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
+# JavaとKotlinをインストール
+RUN apt-get update && apt-get install -y \
+    openjdk-17-jdk \
+    build-essential \
     && rm -rf /var/lib/apt/lists/*
 
 # Python依存関係をインストール
 COPY requirements-serena.txt .
 RUN pip install --no-cache-dir -r requirements-serena.txt
+
+# TypeScript Language Serverをインストール
+RUN npm install -g typescript typescript-language-server
+
+# Java/Kotlin Language Serverをインストール
+RUN npm install -g java-language-server
 
 # Serena MCPサーバーのコードをコピー
 COPY serena-mcp-server.py .
@@ -20,6 +35,7 @@ COPY serena-mcp-server.py .
 ENV PYTHONPATH=/app
 ENV SERENA_API_KEY=""
 ENV SERENA_MODEL="gpt-4o-mini"
+ENV PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
 
 # ポートを公開
 EXPOSE 8080
