@@ -35,7 +35,7 @@ docker compose down
 > - **STDIO（推奨）**: Serena は **compose の常駐対象にしません**。  
 >   Claude 側の `mcp-servers*.json` に  
 >   `docker run -i ... --transport stdio` を記述し、**Claude が必要時に起動**します。
-> - **常駐させたい場合**: Serena を **SSE**（`--transport sse --port 9121`）で起動し、  
+> - **常駐したい場合**: Serena を **SSE**（`--transport sse --port 9121`）で起動し、  
 >   Claude は **SSEのURL接続**に切り替えます。
 
 **📝 注意**: `docker compose up -d` では **Serena(STDIO)は起動しません**。SerenaはClaude Codeが自動起動します。
