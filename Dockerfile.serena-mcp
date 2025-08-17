@@ -3,23 +3,24 @@ FROM python:3.11-slim
 # 作業ディレクトリを設定
 WORKDIR /app
 
-# 必要なパッケージをインストール（最小限）
+# 必要なパッケージをインストール
 RUN apt-get update && apt-get install -y \
     git \
     curl \
     gnupg \
     wget \
     unzip \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 # Node.jsとnpmをインストール
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
-# Java 11をインストール（より軽量）
+# Java 17をインストール
 RUN apt-get update && apt-get install -y \
-    openjdk-11-jdk-headless \
+    default-jdk \
     && rm -rf /var/lib/apt/lists/*
 
 # Python依存関係をインストール
@@ -29,25 +30,20 @@ RUN pip install --no-cache-dir -r requirements-serena.txt
 # TypeScript Language Serverをインストール
 RUN npm install -g typescript typescript-language-server
 
-# Java Language Serverをインストール
-RUN npm install -g java-language-server
+# Kotlin Language Serverをインストール
+RUN curl -L -o /usr/local/bin/kotlin-language-server \
+    https://github.com/fwcd/kotlin-language-server/releases/latest/download/server \
+    && chmod +x /usr/local/bin/kotlin-language-server
 
 # Serena MCPサーバーのコードをコピー
 COPY serena-mcp-server.py .
-
-# エントリポイントスクリプトを作成
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
 
 # 環境変数を設定
 ENV PYTHONPATH=/app
 ENV SERENA_API_KEY=""
 ENV SERENA_MODEL="gpt-4o-mini"
-ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+ENV JAVA_HOME=/usr/lib/jvm/default-java
 ENV PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
 
-# ポートを公開
-EXPOSE 8080
-
-# サーバーを起動
+# STDIO運用はエントリポイント不要（Claudeが docker run -i で起動する）
 CMD ["python", "serena-mcp-server.py"]
