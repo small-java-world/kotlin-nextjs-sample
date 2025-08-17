@@ -27,6 +27,8 @@ docker compose up -d
 # Backend: http://localhost:8080
 ```
 
+**📝 注意**: `docker compose up -d` では **Serena(STDIO)は起動しません**。SerenaはClaude Codeが自動起動します。
+
 ### 3. AI支援開発環境（STDIO運用）
 ```bash
 # Claude Codeでmcp-servers.jsonを使用して起動
@@ -36,7 +38,7 @@ claude --mcp-config mcp-servers.json
 # 「このリポジトリをSerenaでアクティベートして、シンボルをインデックス化してから作業して」
 ```
 
-**注意**: STDIO運用では `docker compose up -d` でSerenaを起動しません（Claude Codeが自動起動）
+**🚀 Serena運用**: STDIO運用では `docker compose up -d` でSerenaを起動しません（Claude Codeが自動起動）。常駐させたい場合はSSE運用に切替してください。
 
 ## 🧩 技術スタック
 

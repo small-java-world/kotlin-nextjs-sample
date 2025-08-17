@@ -12,3 +12,11 @@
     }
   }
 }
+
+/*
+注意事項:
+1. 絶対パスをマウント: -v "D:\\tsumiki_sample:/workspaces/projects"
+2. Windowsはバックスラッシュをエスケープ: D:\\path\\to\\project
+3. STDIO運用: docker run -i で起動（composeで常駐しない）
+4. イメージ名: tsumiki_sample-serena-mcp（docker compose buildで作成）
+*/

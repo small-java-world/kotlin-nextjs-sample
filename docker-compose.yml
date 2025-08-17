@@ -47,6 +47,12 @@ services:
       - node_modules:/usr/local/lib/node_modules
     profiles:
       - mcp
+    # SSE運用時のhealthcheck（STDIO運用では使用しない）
+    # healthcheck:
+    #   test: ["CMD", "curl", "-fsS", "http://localhost:8080/health"]
+    #   interval: 10s
+    #   timeout: 3s
+    #   retries: 10
 
   # Language Server (独立運用用)
   language-server:

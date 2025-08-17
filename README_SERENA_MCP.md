@@ -6,11 +6,13 @@
 - **設定**: `mcp-servers.json` に `docker run -i ... --transport stdio` を記述
 - **起動**: Claude Codeが自動的に `docker run -i` で起動
 - **注意**: `docker compose up -d` では起動しない（正常動作）
+- **特徴**: SerenaはSTDIO＝Claudeが起動するため、composeで常駐させない
 
 ### **SSE運用（常駐サービス）**
 - **設定**: `docker-compose.yml` で `--transport sse --port ...` を指定
 - **起動**: `docker compose up -d` で常駐サービスとして起動
 - **接続**: Claude側はURL接続（例：`http://localhost:9121/sse`）
+- **特徴**: 常駐させたい場合はSSEに切替
 
 ---
 
